@@ -1,0 +1,21 @@
+version: "3.2"
+services:
+  shopping-cart-service:
+    restart: always
+    container_name: shopping-cart-service
+    build:
+      context: .
+      dockerfile: Dockerfile
+    environment:
+      PORT: 3600
+    ports:
+      - 3600:3600
+    volumes:
+      - ${PWD}:/usr/src/app
+      - /etc/localtime:/etc/localtime:ro
+    links:
+      - mongo
+  mongo:
+    image: mongo
+    ports:
+    - "27017:27017"
