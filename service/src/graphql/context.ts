@@ -1,12 +1,12 @@
-import { AuthenticationError } from 'apollo-server-express';
+import { ForbiddenError, AuthenticationError } from 'apollo-server-express';
 import jwt from 'jsonwebtoken'
 import { RESPONSE_MESSAGE } from '../common/constanst';
 import config from '../configs';
 
-const context = ({ req }) => {
+const context = ({ req, res }) => {
   try {
     const authorization = req.headers.authorization;
-    if (!authorization) return undefined;
+    if (!authorization) throw new AuthenticationError(RESPONSE_MESSAGE.AUTH_FAIL);
     
     const token = authorization.split(' ')[1];
 
@@ -16,7 +16,7 @@ const context = ({ req }) => {
     };
 
   } catch (error) {
-    throw new AuthenticationError(RESPONSE_MESSAGE.INVALID_TOEKN);
+    throw new ForbiddenError(error.message);
   }
 };
 
