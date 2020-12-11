@@ -7,9 +7,9 @@ services:
       context: .
       dockerfile: Dockerfile
     environment:
-      PORT: 3600
+      PORT: 4000
     ports:
-      - 3600:3600
+      - 4000:4000
     volumes:
       - ${PWD}:/usr/src/app
       - /etc/localtime:/etc/localtime:ro

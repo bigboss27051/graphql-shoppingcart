@@ -1,8 +1,10 @@
-export default interface IUser {
+import mongoose from 'mongoose'
+export default interface IUser extends mongoose.Document {
   _id: string
   username: string
-  password: string
+  password?: string
   fullname: string
-  createAt: string
-  updateAt: string
+  createdAt: string
+  updatedAt: string
+  comparePassword(candidatePassword: string): Promise<boolean>
 }

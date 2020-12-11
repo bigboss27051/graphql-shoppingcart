@@ -8,10 +8,12 @@ const configs = {
       name: 'shoppingcart'
     },
     service: {
-      port: 3600
+      port: 4000
     },
     jwt: {
-      secretKey: 'sh@pp1ngCartSecret'
+      secretKey: 'sh@pp1ngCartSecret',
+      jwtExpirationInterval: 60, 
+      expiresIn: '1h'
     }
   }
 }

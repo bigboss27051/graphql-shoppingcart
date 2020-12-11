@@ -1,19 +1,27 @@
 import { gql } from 'apollo-server-express'
-
 const typeDefs = gql`
+  scalar DateTime
+  type Token {
+    tokenType: String
+    accessToken: String
+    refreshToken: String
+    expiresIn: DateTime
+  }
   type User {
-    id: ID
+    _id: ID!
     username: String
-    password: String
-    fullname: String,
-    createAt: String,
-    updateAt: String
+    fullname: String
+    token: Token
+    createdAt: DateTime
+    updatedAt: DateTime
   }
   type Query {
-    getAll: [User]
+    getUsers: [User]
   }
   type Mutation {
-    createUser(username: String!, password: String!, fullname: String!): Auth
+    register(username: String!, password: String!, fullname: String!): User
+    login(username: String!, password: String!): User
+    refresh(username: String!, refreshToken: String!): Token
   }
 `
 

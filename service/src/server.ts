@@ -1,19 +1,20 @@
-import express, { Request, Response } from 'express'
+import express from 'express'
 import { ApolloServer } from 'apollo-server-express'
 import config from './configs'
 import connectDB from './database/connection'
-const app = express()
+import context from './graphql/context'
+import { schema } from './graphql'
 connectDB()
-app.get('/', (req: Request, res: Response) => {
-  res.send(`Server is now running on http://localhost:${config.service.port}`)
-})
 
 // apollo server
-const server = new ApolloServer({ 
-  typeDefs, 
-  resolvers,
-  context
-});
-server.applyMiddleware({ app });
+const server = new ApolloServer({
+  schema,
+  context,
+})
+const app = express()
+const path = '/graphql'
+server.applyMiddleware({ app, path })
 
-app.listen(config.service.port, () => console.log(`Server is now running on http://localhost:${config.service.port}`))
+app.listen({ port: config.service.port }, () =>
+  console.log(`Server ready at http://localhost:4000${server.graphqlPath}`)
+)
