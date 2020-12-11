@@ -12,8 +12,8 @@ const configs = {
     },
     jwt: {
       secretKey: 'sh@pp1ngCartSecret',
-      jwtExpirationInterval: 60, 
-      expiresIn: '1h'
+      jwtExpirationInterval: 1, 
+      expiresIn: '1m'
     }
   }
 }

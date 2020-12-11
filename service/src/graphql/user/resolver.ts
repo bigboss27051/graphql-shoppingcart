@@ -51,36 +51,36 @@ const resolvers = {
         { expiresIn: config.jwt.expiresIn }
       )
       const token = await generateToken(result, tokenStr)
-      console.log({
-        ...result.toObject(),
-        token
-      })
       return {
         ...result.toObject(),
-        token
+        token,
       }
     },
     refresh: async (root, args) => {
       const { username = '', refreshToken = '' } = args
-      const refreshObject = await RefreshToken.findOneAndRemove({
+      const refreshObject = await RefreshToken.findOneAndDelete({
         username,
-        token: refreshToken
+        token: refreshToken,
       })
-      if (refreshObject && (refreshObject.username === username) && dayjs().isBefore(refreshObject.expires)) {
+      if (refreshObject !== null) {
+        const isBefore = dayjs().isBefore(dayjs(refreshObject.expires).locale())
+        if (refreshObject && refreshObject.username === username && isBefore) {
+          throw new ValidationError(RESPONSE_MESSAGE.INVALID_REFRESH_TOKEN)
+        }
+
+        const user = await User.findOne({ username }).exec()
+        const tokenStr = jwt.sign(
+          {
+            data: user,
+          },
+          config.jwt.secretKey,
+          { expiresIn: config.jwt.expiresIn }
+        )
+        const response = await generateToken(user, tokenStr)
+        return response
+      } else {
         throw new ValidationError(RESPONSE_MESSAGE.INVALID_REFRESH_TOKEN)
       }
-    
-      const res = await User.findOne({ username })
-      const user = res?.toObject()
-      const tokenStr = jwt.sign(
-        {
-          data: user,
-        },
-        config.jwt.secretKey,
-        { expiresIn: config.jwt.expiresIn }
-      )
-      const response = await generateToken(user, tokenStr)
-      return response
     },
   },
   DateTime: GraphQLDateTime,

@@ -28,16 +28,16 @@ RefreshTokenSchema.methods.generate = async function (
   const { username } = user
   const token = `${userId}.${crypto.randomBytes(40).toString('hex')}`
   const expires = dayjs().add(7, 'day').toDate()
-  const tokenObject = new RefreshToken({
+  const tokenModel = new RefreshToken({
     token,
     userId,
     username,
     expires,
   })
-  const result = await tokenObject.save()
-  console.log('refresh', { result })
+  const result = await tokenModel.save()
   return result
 }
+
 const RefreshToken = mongoose.model<IRefreshToken & Document>(
   'RefreshToken',
   RefreshTokenSchema
