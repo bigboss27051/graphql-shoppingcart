@@ -11,7 +11,7 @@
     "start:prod": "npm run build && cross-env NODE_ENV=production PORT=4000 node -r ts-node/register lib/server",
     "dev:watch": "cross-env NODE_ENV=develop PORT=4000 nodemon",
     "dev": "npm run build &&  node -r ts-node/register lib/server",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "cross-env NODE_ENV=develop jest"
   },
   "keywords": [],
   "author": "",
@@ -33,10 +33,16 @@
     "mongoose": "5.11.5"
   },
   "devDependencies": {
+    "@types/jest": "26.0.19",
     "@types/node": "14.14.11",
+    "apollo-server-core": "^2.19.0",
+    "apollo-server-testing": "2.19.0",
     "eslint": "7.15.0",
     "eslint-plugin-import": "2.22.1",
+    "jest": "26.6.3",
+    "node-mocks-http": "^1.9.0",
     "nodemon": "2.0.6",
+    "ts-jest": "26.4.4",
     "ts-node": "9.1.1",
     "typescript": "4.1.2"
   }
