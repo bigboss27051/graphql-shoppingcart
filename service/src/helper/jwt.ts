@@ -1,6 +1,7 @@
-import RefreshToken from "../models/refrerashToken"
+import RefreshToken from '../models/refrerashToken'
 import dayjs from 'dayjs'
-import config from "../configs"
+import jwt from 'jsonwebtoken'
+import config from '../configs'
 
 export const generateToken = async (user: any, accessToken: string) => {
   const refreshTokenModel = new RefreshToken()
@@ -11,7 +12,17 @@ export const generateToken = async (user: any, accessToken: string) => {
     tokenType,
     accessToken,
     refreshToken: result.get('token'),
-    expiresIn
+    expiresIn,
   }
 }
 
+export const generateAccessToken = (data: any): string => {
+  const tokenStr = jwt.sign(
+    {
+      data,
+    },
+    config.jwt.secretKey,
+    { expiresIn: '1h' }
+  )
+  return tokenStr
+}

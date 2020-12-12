@@ -5,7 +5,7 @@ import { createUser as createUserService } from '../../repositories/user'
 import User from '../../models/user'
 import { RESPONSE_MESSAGE } from '../../common/constanst'
 import config from '../../configs'
-import { generateToken } from '../../helper/jwt'
+import { generateAccessToken, generateToken } from '../../helper/jwt'
 import RefreshToken from '../../models/refrerashToken'
 import dayjs from 'dayjs'
 
@@ -21,13 +21,7 @@ const resolvers = {
     register: async (root, args) => {
       const { username = '', password = '', fullname = '' } = args
       const result = await createUserService(username, password, fullname)
-      const tokenStr = jwt.sign(
-        {
-          data: result,
-        },
-        config.jwt.secretKey,
-        { expiresIn: '1h' }
-      )
+      const tokenStr = generateAccessToken(result)
       const token = generateToken(result, tokenStr)
       return { ...result, token }
     },
@@ -43,13 +37,7 @@ const resolvers = {
         console.log('no match')
         throw new ForbiddenError(RESPONSE_MESSAGE.INVALIDE_USER_OR_PASSWORD)
       }
-      const tokenStr = jwt.sign(
-        {
-          data: result,
-        },
-        config.jwt.secretKey,
-        { expiresIn: config.jwt.expiresIn }
-      )
+      const tokenStr = generateAccessToken(result)
       const token = await generateToken(result, tokenStr)
       return {
         ...result.toObject(),
@@ -69,13 +57,7 @@ const resolvers = {
         }
 
         const user = await User.findOne({ username }).exec()
-        const tokenStr = jwt.sign(
-          {
-            data: user,
-          },
-          config.jwt.secretKey,
-          { expiresIn: config.jwt.expiresIn }
-        )
+        const tokenStr = generateAccessToken(user)
         const response = await generateToken(user, tokenStr)
         return response
       } else {
