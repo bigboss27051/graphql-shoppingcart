@@ -1,19 +1,27 @@
-import { gql, makeExecutableSchema } from 'apollo-server-express'
+import { makeExecutableSchema } from 'apollo-server-express'
 import { mergeTypeDefs } from 'graphql-tools-merge-typedefs'
-import merge  from 'lodash.merge'
+import merge from 'lodash.merge'
 import userResolver from './user/resolver'
 import userTypeDefs from './user/typeDefs'
+import productResolver from './product/resolver'
+import productTypeDefs from './product/typeDefs'
+import cartResolver from './cart/resolver'
+import cartTypeDefs from './cart/typeDefs'
+import orderResolver from './order/resolver'
+import orderTypeDefs from './order/typeDefs'
 
-const root = gql`
-  type Query {
-    root: String
-  }
-  type Mutation {
-    root: String
-  }
-`
-const resolvers = merge ([userResolver])
+const resolvers = merge([
+  userResolver,
+  productResolver,
+  cartResolver,
+  orderResolver,
+])
 
-const typeDefs = mergeTypeDefs([root, userTypeDefs, ])
+const typeDefs = mergeTypeDefs([
+  userTypeDefs,
+  productTypeDefs,
+  cartTypeDefs,
+  orderTypeDefs,
+])
 
 export const schema = makeExecutableSchema({ resolvers, typeDefs })

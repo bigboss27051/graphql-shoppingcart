@@ -1,13 +1,13 @@
 import { ForbiddenError, ValidationError } from 'apollo-server-express'
 import { GraphQLDateTime } from 'graphql-iso-date'
+import dayjs from 'dayjs'
 import { createUser as createUserService } from '../../repositories/user'
 import User from '../../models/user'
 import { RESPONSE_MESSAGE } from '../../common/constanst'
 import { generateAccessToken, generateToken } from '../../helper/jwt'
 import RefreshToken from '../../models/refrerashToken'
-import dayjs from 'dayjs'
 
-const resolvers = {
+const resolver = {
   Query: {
     getUsers: async (root, args: any, context: any) => {
       if (!context.loggedInUser)
@@ -66,4 +66,4 @@ const resolvers = {
   DateTime: GraphQLDateTime,
 }
 
-export default resolvers
+export default resolver
