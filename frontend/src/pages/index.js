@@ -1,0 +1,2 @@
+export { ProducList } from './product'
+

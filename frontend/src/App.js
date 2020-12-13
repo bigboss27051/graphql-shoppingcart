@@ -1,24 +1,22 @@
-import logo from './logo.svg';
-import './App.css';
+
+import React from "react"
+import { RecoilRoot } from "recoil"
+import recoilPersist from "recoil-persist"
+import './App.css'
+import Layout from './components/Layout'
 
 function App() {
+  const { RecoilPersist, updateState } = recoilPersist(["cartHoldState", "authenState"], {
+    key: "recoil-persist", 
+    storage: localStorage, 
+  })
+
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+    <RecoilRoot initializeState={updateState}>
+      <RecoilPersist />
+      <Layout />
+    </RecoilRoot>
+
   );
 }
 
