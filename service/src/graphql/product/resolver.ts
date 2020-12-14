@@ -4,8 +4,6 @@ import Product from '../../models/prodcut'
 const resolver = {
   Query: {
     getProducts: async (root, args: any, context: any) => {
-      if (!context.loggedInUser)
-        throw new ForbiddenError(RESPONSE_MESSAGE.AUTH_FAIL)
       return await Product.find({}).exec()
     },
     getProduct: async (root, args: any, context: any) => {

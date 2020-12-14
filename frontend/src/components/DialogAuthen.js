@@ -1,55 +1,83 @@
-import React from 'react';
-import Button from '@material-ui/core/Button';
+import React, { useState } from 'react';
 import {
   TextField,
   Dialog,
   DialogActions,
   DialogContent,
   DialogContentText,
-  DialogTitle
+  DialogTitle,
+  Button
 } from '@material-ui/core';
 
-export default function FormDialog() {
-  const [open, setOpen] = React.useState(false);
+const FormDialog = (props) => {
+  const { isShowDialog = false } = props
+  const [isLoginPageShow, setLoginPageShow] = useState(false)
 
-  const handleClickOpen = () => {
-    setOpen(true);
+  const handleClickDialog = () => {
+    return !isShowDialog
   };
 
-  const handleClose = () => {
-    setOpen(false);
+  const handleONSwitchFrom = () => {
+    setLoginPageShow(!isLoginPageShow);
   };
 
   return (
-    <div>
-      <Button variant="outlined" color="primary" onClick={handleClickOpen}>
-        Open form dialog
-      </Button>
-      <Dialog open={open} onClose={handleClose} aria-labelledby="form-dialog-title">
-        <DialogTitle id="form-dialog-title">Subscribe</DialogTitle>
+      <Dialog open={isShowDialog} onClose={handleClickDialog} aria-labelledby="form-dialog-title">
+        <DialogTitle id="form-dialog-title">{isLoginPageShow ? 'Login' : 'Register'}</DialogTitle>
         <DialogContent>
           <DialogContentText>
-            To subscribe to this website, please enter your email address here. We will send updates
-            occasionally.
+            <Button variant="outlined" color="primary" onClick={handleONSwitchFrom}>
+              {
+                isLoginPageShow ? 'Login to Shopping Cart' : 'Register to Shopping Cart'
+              }
+            </Button>
           </DialogContentText>
           <TextField
             autoFocus
             margin="dense"
-            id="name"
-            label="Email Address"
-            type="email"
+            id="username"
+            label="Username"
+            type="text"
             fullWidth
           />
+          <TextField
+            autoFocus
+            margin="dense"
+            id="password"
+            label="Password"
+            type="text"
+            fullWidth
+          />
+          {!isLoginPageShow ??
+            <TextField
+              autoFocus
+              margin="dense"
+              id="confirmPassword"
+              label="Confirm Password"
+              type="text"
+              fullWidth
+            />
+          }
+          {!isLoginPageShow &&
+            <TextField
+              autoFocus
+              margin="dense"
+              id="fullname"
+              label="Full Name"
+              type="text"
+              fullWidth
+            />}
         </DialogContent>
         <DialogActions>
-          <Button onClick={handleClose} color="primary">
+          <Button onClick={handleClickDialog} color="primary">
             Cancel
           </Button>
-          <Button onClick={handleClose} color="primary">
-            Login
+          <Button onClick={handleClickDialog} color="primary">
+            {isLoginPageShow ? 'Login' : 'Register'}
           </Button>
         </DialogActions>
       </Dialog>
-    </div>
   );
 }
+
+export default FormDialog 
