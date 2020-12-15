@@ -1,5 +1,5 @@
 import { selector, atom } from 'recoil'
-import { getProducts } from '../services/product'
+import { getProducts as getProductsService } from '../services/product'
 // atom 
 export const authenAtom = atom({
   key: 'productstState',
@@ -8,12 +8,12 @@ export const authenAtom = atom({
 
 
 // get products
-export const products = selector({
+export const getProducts = selector({
   key: 'getProducts',
   get: async ({ set }) => {
     let products = []
     try {
-      const { data: { getProducts: result } } = await getProducts()
+      const { data: { getProducts: result } } = await getProductsService()
       if (result.length > 0) {
         products = [...result]
         set('productstState', products)
